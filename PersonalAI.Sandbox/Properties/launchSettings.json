@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PersonalAI.Sandbox (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "PersonalAI.Sandbox (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

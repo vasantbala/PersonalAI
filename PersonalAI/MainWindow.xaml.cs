@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
 namespace PersonalAI
 {
@@ -37,7 +38,10 @@ namespace PersonalAI
                 {
                     if (e.Key == Key.Enter)
                     {
+                        CollapseResponse();
+                        ResponseLoading.Visibility = Visibility.Visible;
                         await DoPredict();
+                        ResponseLoading.Visibility = Visibility.Collapsed;
                         ShowResponse();
                     }
 
@@ -85,6 +89,16 @@ namespace PersonalAI
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void ClearResponseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ResponseTB.Text = string.Empty;
+        }
+
+        private void CopyToClipboardBtn_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Clipboard.SetText(ResponseTB.Text);
         }
     }
 }

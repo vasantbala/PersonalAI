@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:local="clr-namespace:PersonalAI"
         mc:Ignorable="d"
         Title="PersonalAI" MinHeight="40" Height="{Binding ElementName=SearchBarGridParent, Path=ActualHeight}" Width="620"
@@ -16,11 +18,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Border CornerRadius="10"  Grid.RowSpan="2" Opacity="1">
+        <Border CornerRadius="10" Grid.RowSpan="2" Opacity="0.7">
             <Border.Background>
                 <LinearGradientBrush>
-                    <GradientStop Color="#7BE9F6" Offset="0.0"/>
-                    <GradientStop Color="#7BE9F6" Offset="1.3"/>
+                    <GradientStop Color="#6274e7" Offset="1"/>
+                    <GradientStop Color="#8752a3" Offset="0.5"/>
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
@@ -32,8 +34,8 @@
             <Border CornerRadius="10" Opacity="1">
                 <Border.Background>
                     <LinearGradientBrush>
-                        <GradientStop Color="#7BE9F6" Offset="0.0"/>
-                        <GradientStop Color="#000eff" Offset="1.3"/>
+                        <GradientStop Color="#ebf4f5" Offset="0.0"/>
+                        <GradientStop Color="#b5c6e0" Offset="1.3"/>
                     </LinearGradientBrush>
                 </Border.Background>
             </Border>
@@ -49,25 +51,32 @@
             SpellCheck.IsEnabled="True"
             FontFamily="Helvetica" FontWeight="Thin"
             Text="How can I help?"
-            Width="590"
+            Width="560"
             Background="Transparent"
             BorderThickness="0"
             Opacity="0.5"
             Height="Auto"
             />
-                <Button x:Name="CloseBtn" Width="Auto" Height="20" Content="X" Click="CloseBtn_Click"></Button>
+                <Button x:Name="CloseBtn" Background="Transparent" Width="Auto" Height="30" Click="CloseBtn_Click">
+                    <iconPacks:PackIconModern Kind="Close" />
+                </Button>
             </StackPanel>
         </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
-
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+            <mah:ProgressRing x:Name="ResponseLoading" Visibility="Collapsed" Margin="5" Height="15" Width="15"  />
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <TextBlock x:Name="ResponseTB" VerticalAlignment="Center" HorizontalAlignment="Left" 
-                   Margin="10,5,0,5" 
+                   Margin="10,5,0,5"
+                    Foreground="WhiteSmoke"
                    Width="520" MaxHeight="200" TextWrapping="WrapWithOverflow" MinHeight="50" Height="auto" 
                    Text="This is a TextBlock"/>
             </ScrollViewer>
-            <Button x:Name="CopyToClipboardBtn" Content="Copy" Height="20" Margin="10,0,0,0" />
-            <Button x:Name="ClearResponseBtn" Content="Clear" Height="20" Margin="10,0,0,0" />
+            <Button x:Name="ClearResponseBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="ClearResponseBtn_Click" Margin="10,0,0,0" >
+                <iconPacks:PackIconModern Kind="ClearReflectHorizontal" />
+            </Button>
+            <Button x:Name="CopyToClipboardBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="CopyToClipboardBtn_Click" Margin="10,0,0,0">
+                <iconPacks:PackIconModern Kind="Clipboard" />
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

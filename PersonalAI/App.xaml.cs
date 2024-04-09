@@ -2,21 +2,21 @@
 using Microsoft.Extensions.DependencyInjection;
 using PersonalAI.Common;
 using PersonalAI.Core;
-using System.CodeDom;
-using System.Configuration;
-using System.Data;
 using System.IO;
 using System.Windows;
+using NotifyIcon = System.Windows.Forms.NotifyIcon;
 
 namespace PersonalAI
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : System.Windows.Application
     {
         public IServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
+
+        private MainWindow _mainWindow = null;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -31,8 +31,44 @@ namespace PersonalAI
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            NotifyIcon icon = new NotifyIcon() 
+            {
+                Icon = ProjectResources.PersonalAI,
+                Visible = true
+            };
+            icon.Click += Icon_Click;
+            
+
+            // Create a context menu with an "Exit" item
+            var contextMenuStrip = new ContextMenuStrip();
+            var exitMenu = new System.Windows.Forms.ToolStripMenuItem("Exit");
+            exitMenu.Click += ExitMenu_Click;
+            contextMenuStrip.Items.Add(exitMenu);
+
+            // Assign the context menu to the NotifyIcon
+            icon.ContextMenuStrip = contextMenuStrip;
+
+            ShowMainWindow();
+        }
+
+        private void ExitMenu_Click(object? sender, EventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void Icon_Click(object? sender, EventArgs e)
+        {
+            ShowMainWindow();
+        }
+
+        private void ShowMainWindow()
+        {
+            if (_mainWindow == null)
+            {
+                _mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            }
+            _mainWindow.WindowState = WindowState.Normal;
+            _mainWindow.Show();
         }
 
         private void ConfigureServices(IServiceCollection services)

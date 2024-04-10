@@ -64,13 +64,12 @@
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
             <mah:ProgressRing x:Name="ResponseLoading" Visibility="Collapsed" Margin="5" Height="15" Width="15"  />
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <TextBlock x:Name="ResponseTB" VerticalAlignment="Center" HorizontalAlignment="Left" 
-                   Margin="10,5,0,5"
-                    Foreground="WhiteSmoke"
-                   Width="520" MaxHeight="200" TextWrapping="WrapWithOverflow" MinHeight="50" Height="auto" 
-                   Text="This is a TextBlock"/>
-            </ScrollViewer>
+            <TextBox x:Name="ResponseTB" VerticalAlignment="Center" HorizontalAlignment="Left"   Foreground="WhiteSmoke"
+                     Background="Transparent" Width="510" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" 
+                     BorderBrush="Transparent" MaxHeight="400" TextWrapping="WrapWithOverflow" MinHeight="50" Height="auto" 
+                     Text="This is a TextBlock" Margin="5,5"  >
+                
+            </TextBox>
             <Button x:Name="ClearResponseBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="ClearResponseBtn_Click" Margin="10,0,0,0" >
                 <iconPacks:PackIconModern Kind="ClearReflectHorizontal" />
             </Button>

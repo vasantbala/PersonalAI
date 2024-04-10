@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PersonalAI.Sandbox.WPF"
         mc:Ignorable="d"
-        Title="ResultWindow" Height="450" Width="800">
+        Title="ResultWindow" Height="450" Width="400">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -13,7 +13,28 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Width="Auto" Height="Auto" Text="hhhhh" />
+
+        <StackPanel Grid.Row="0" Height="450" Width="400" >
+            <TextBox Name="TextBox2" Margin="10,10,50,0"
+
+         Width="300" Height="150"
+                     
+         Text="hjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnn hjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnnhjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnnhjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnnhjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnnhjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnnhjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnnhjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnnhjhhhhjj jkkkkkkk kkkkkkkkkkkk jhhhhhh nnnnnnnnnn nnnnn  end"
+
+         HorizontalScrollBarVisibility="Visible"
+
+         VerticalScrollBarVisibility="Visible"
+
+         TextWrapping="Wrap"
+
+         IsReadOnly="True"
+
+         AcceptsReturn="True" >
+
+            </TextBox>
+
+        </StackPanel>
+        
         
     </Grid>
 </Window>

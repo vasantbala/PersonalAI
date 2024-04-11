@@ -3,7 +3,6 @@ namespace PersonalAI.Core
 {
     public interface IGradioClient
     {
-        void Dispose();
-        Task<string> Predict(string prompt);
+        Task<string> Predict(string llmType, string prompt);
     }
 }

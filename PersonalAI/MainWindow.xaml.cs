@@ -3,6 +3,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using PersonalAI.ViewModels;
+using Microsoft.Extensions.Options;
+using PersonalAI.Common;
 
 namespace PersonalAI
 {
@@ -29,6 +32,9 @@ namespace PersonalAI
         private const uint MOD_CONTROL = 0x0002; //CTRL
         private const uint MOD_SHIFT = 0x0004; //SHIFT
         private const uint MOD_WIN = 0x0008; //WINDOWS
+
+        private LLMServiceViewModel _llmServiceList = new();
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Register the hotkey
@@ -77,15 +83,43 @@ namespace PersonalAI
 
         
         private readonly IGradioClient _gradioClient;
+        private readonly AppSettings _appSettings;
 
-        public MainWindow(IGradioClient gradioClient)
+        public MainWindow(IGradioClient gradioClient, IOptions<AppSettings> appSettings)
         {
             InitializeComponent();
+            
             Loaded += MainWindow_Loaded;
             Unloaded += MainWindow_Unloaded;
             _gradioClient = gradioClient;
+            _appSettings = appSettings.Value;
+            
+            PopulateLLMTypeList();
+            DataContext = _llmServiceList;
+
+            ToggleSettingsPanel();
             CollapseResponse();
         }
+
+        private void PopulateLLMTypeList()
+        {
+            var list = new List<LLMServiceItemViewModel>();
+            list.Add(new LLMServiceItemViewModel() { Name = "Choose a model", BaseUrl = "" });
+            if (_appSettings?.GradleSettings?.Length > 0)
+            {
+                foreach (var item in _appSettings.GradleSettings)
+                {
+                    list.Add(new LLMServiceItemViewModel()
+                    {
+                        BaseUrl = item.Url,
+                        Name = item.LLMType
+                    });
+                }
+                _llmServiceList.LLMServiceItems = new System.Windows.Data.CollectionView(list);
+                _llmServiceList.SelectedLLMService = list[1].Name;
+            }
+        }
+
 
         private async void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
@@ -95,6 +129,14 @@ namespace PersonalAI
                 {
                     if (e.Key == Key.Enter)
                     {
+                        if (LLMOptions.SelectedIndex == 0)
+                        {
+                            System.Windows.MessageBox.Show("Choose a valid LLM Model to continue.");
+                            SettingBtn.IsChecked = true;
+                            ToggleSettingsPanel();
+                            return;
+                        }
+
                         CollapseResponse();
                         ResponseLoading.Visibility = Visibility.Visible;
                         await DoPredict();
@@ -116,7 +158,7 @@ namespace PersonalAI
         {
             try
             {
-                ResponseTB.Text = await _gradioClient.Predict(SearchBox.Text);
+                ResponseTB.Text = await _gradioClient.Predict((string)LLMOptions.SelectedValue, SearchBox.Text);
             }
             catch (Exception ex) 
             {
@@ -150,12 +192,30 @@ namespace PersonalAI
 
         private void ClearResponseBtn_Click(object sender, RoutedEventArgs e)
         {
-            ResponseTB.Text = string.Empty;
+            CollapseResponse(true);
+
         }
 
         private void CopyToClipboardBtn_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Clipboard.SetText(ResponseTB.Text);
+        }
+
+        private void SettingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleSettingsPanel();
+        }
+
+        private void ToggleSettingsPanel()
+        {
+            if (SettingBtn.IsChecked.HasValue && SettingBtn.IsChecked.Value)
+            {
+                SettingsPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SettingsPanel.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

@@ -17,8 +17,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Border CornerRadius="10" Grid.RowSpan="2" Opacity="0.7">
+        <Border CornerRadius="10" Grid.RowSpan="3" Opacity="0.7">
             <Border.Background>
                 <LinearGradientBrush>
                     <GradientStop Color="#6274e7" Offset="1"/>
@@ -51,19 +52,32 @@
             SpellCheck.IsEnabled="True"
             FontFamily="Helvetica" FontWeight="Thin"
             Text="How can I help?"
-            Width="560"
+            Width="530"
             Background="Transparent"
             BorderThickness="0"
             Opacity="0.5"
             Height="Auto"
-            />
-                <Button x:Name="CloseBtn" Background="Transparent" Width="Auto" Height="30" Click="CloseBtn_Click">
+            />                
+                <ToggleButton x:Name="SettingBtn" Click="SettingBtn_Click" Background="Transparent" IsThreeState="False" IsChecked="False" Width="Auto" Height="30" Margin="5,5">
+                    <iconPacks:PackIconModern x:Name="SettingBtnIcon" Kind="Settings"/>
+                </ToggleButton>
+                <Button x:Name="CloseBtn" Background="Transparent" Width="Auto" Height="30" Click="CloseBtn_Click" Margin="5,5">
                     <iconPacks:PackIconModern Kind="Close" />
                 </Button>
             </StackPanel>
         </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
-            <mah:ProgressRing x:Name="ResponseLoading" Visibility="Collapsed" Margin="5" Height="15" Width="15"  />
+        <StackPanel x:Name="SettingsPanel" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Height="Auto">
+            <ComboBox x:Name="LLMOptions"
+                      Width="200" 
+                      ItemsSource="{Binding Path=LLMServiceItems}" 
+                      Height="20"
+                      Margin="5,5"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Name"
+                      SelectedValue="{Binding Path=SelectedLLMService}"/>           
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+            <mah:ProgressRing Foreground="WhiteSmoke" x:Name="ResponseLoading" Visibility="Collapsed" Margin="5" Height="15" Width="15"  />
             <TextBox x:Name="ResponseTB" VerticalAlignment="Center" HorizontalAlignment="Left"   Foreground="WhiteSmoke"
                      Background="Transparent" Width="510" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" 
                      BorderBrush="Transparent" MaxHeight="400" TextWrapping="WrapWithOverflow" MinHeight="50" Height="auto" 
@@ -71,9 +85,9 @@
                 
             </TextBox>
             <Button x:Name="ClearResponseBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="ClearResponseBtn_Click" Margin="10,0,0,0" >
-                <iconPacks:PackIconModern Kind="ClearReflectHorizontal" />
+                <iconPacks:PackIconModern Kind="Clean" />
             </Button>
-            <Button x:Name="CopyToClipboardBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="CopyToClipboardBtn_Click" Margin="10,0,0,0">
+            <Button ToolTip="Copy to Clipboard" x:Name="CopyToClipboardBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="CopyToClipboardBtn_Click" Margin="10,0,0,0">
                 <iconPacks:PackIconModern Kind="Clipboard" />
             </Button>
         </StackPanel>

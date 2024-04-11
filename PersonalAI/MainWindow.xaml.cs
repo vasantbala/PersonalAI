@@ -42,7 +42,8 @@ namespace PersonalAI
 
             if (!result)
             {
-                System.Windows.MessageBox.Show("Failed to register the hotkey.");
+                System.Windows.MessageBox.Show("Another instance is already running. Will exit now.");
+                Close();
             }
         }
 
@@ -216,6 +217,12 @@ namespace PersonalAI
             {
                 SettingsPanel.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void headerThumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        {
+            Left = Left + e.HorizontalChange;
+            Top = Top + e.VerticalChange;
         }
     }
 }

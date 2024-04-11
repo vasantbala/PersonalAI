@@ -26,6 +26,13 @@
                     <GradientStop Color="#8752a3" Offset="0.5"/>
                 </LinearGradientBrush>
             </Border.Background>
+            <Thumb x:Name="headerThumb" 
+                Opacity="0" 
+                Background="{x:Null}" 
+                Foreground="{x:Null}"
+                DragDelta="headerThumb_DragDelta"       
+            >
+            </Thumb>
         </Border>
         <Grid Margin="5" Grid.Row="0" x:Name="SearchBarGrid" MinHeight="40" Height="{Binding ElementName=SearchBox, Path=ActualHeight}" VerticalAlignment="Top">
             

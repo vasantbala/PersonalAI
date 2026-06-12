@@ -83,20 +83,37 @@
                       SelectedValuePath="Name"
                       SelectedValue="{Binding Path=SelectedLLMService}"/>           
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
-            <mah:ProgressRing Foreground="WhiteSmoke" x:Name="ResponseLoading" Visibility="Collapsed" Margin="5" Height="15" Width="15"  />
-            <TextBox x:Name="ResponseTB" VerticalAlignment="Center" HorizontalAlignment="Left"   Foreground="WhiteSmoke"
-                     Background="Transparent" Width="510" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" 
-                     BorderBrush="Transparent" MaxHeight="400" TextWrapping="WrapWithOverflow" MinHeight="50" Height="auto" 
-                     Text="This is a TextBlock" Margin="5,5"  >
-                
-            </TextBox>
-            <Button x:Name="ClearResponseBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="ClearResponseBtn_Click" Margin="10,0,0,0" >
-                <iconPacks:PackIconModern Kind="Clean" />
-            </Button>
-            <Button ToolTip="Copy to Clipboard" x:Name="CopyToClipboardBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="CopyToClipboardBtn_Click" Margin="10,0,0,0">
-                <iconPacks:PackIconModern Kind="Clipboard" />
-            </Button>
+        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="5,2,5,5">
+            <ScrollViewer x:Name="ChatScrollViewer" MaxHeight="400" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="ChatList" Margin="0,2">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2">
+                                <Border x:Name="Bubble" CornerRadius="8" Padding="10,6" MaxWidth="480"
+                                        HorizontalAlignment="Right" Background="#44FFFFFF">
+                                    <TextBlock Text="{Binding Content}" TextWrapping="Wrap"
+                                               Foreground="White" FontSize="14" FontFamily="Helvetica"/>
+                                </Border>
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsUser}" Value="False">
+                                    <Setter TargetName="Bubble" Property="HorizontalAlignment" Value="Left"/>
+                                    <Setter TargetName="Bubble" Property="Background" Value="#33000000"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+                <mah:ProgressRing Foreground="WhiteSmoke" x:Name="ResponseLoading" Visibility="Collapsed" Margin="5" Height="15" Width="15"/>
+                <Button x:Name="NewChatBtn" ToolTip="New Chat" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="NewChatBtn_Click" Margin="10,0,0,0">
+                    <iconPacks:PackIconModern Kind="Delete"/>
+                </Button>
+                <Button ToolTip="Copy to Clipboard" x:Name="CopyToClipboardBtn" Foreground="WhiteSmoke" Background="Transparent" Height="30" Click="CopyToClipboardBtn_Click" Margin="10,0,0,0">
+                    <iconPacks:PackIconModern Kind="Clipboard"/>
+                </Button>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

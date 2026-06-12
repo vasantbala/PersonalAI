@@ -83,32 +83,34 @@ namespace PersonalAI
         }
 
         
-        private readonly IGradioClient _gradioClient;
+        private readonly ILLMClient _llmClient;
         private readonly AppSettings _appSettings;
+        private readonly ConversationViewModel _conversation;
 
-        public MainWindow(IGradioClient gradioClient, IOptions<AppSettings> appSettings)
+        public MainWindow(ILLMClient llmClient, IOptions<AppSettings> appSettings, ConversationViewModel conversation)
         {
             InitializeComponent();
-            
+
             Loaded += MainWindow_Loaded;
             Unloaded += MainWindow_Unloaded;
-            _gradioClient = gradioClient;
+            _llmClient = llmClient;
             _appSettings = appSettings.Value;
-            
+            _conversation = conversation;
+
             PopulateLLMTypeList();
             DataContext = _llmServiceList;
+            ChatList.ItemsSource = _conversation.Messages;
 
             ToggleSettingsPanel();
-            CollapseResponse();
         }
 
         private void PopulateLLMTypeList()
         {
             var list = new List<LLMServiceItemViewModel>();
             list.Add(new LLMServiceItemViewModel() { Name = "Choose a model", BaseUrl = "" });
-            if (_appSettings?.GradleSettings?.Length > 0)
+            if (_appSettings?.Providers?.Length > 0)
             {
-                foreach (var item in _appSettings.GradleSettings)
+                foreach (var item in _appSettings.Providers)
                 {
                     list.Add(new LLMServiceItemViewModel()
                     {
@@ -138,16 +140,14 @@ namespace PersonalAI
                             return;
                         }
 
-                        CollapseResponse();
                         ResponseLoading.Visibility = Visibility.Visible;
                         await DoPredict();
                         ResponseLoading.Visibility = Visibility.Collapsed;
-                        ShowResponse();
                     }
 
                     if (e.Key == Key.Oem5)
                     {
-                        ResponseTB.Text = string.Empty;
+                        _conversation.Clear();
                     }
                 }
                 
@@ -157,33 +157,24 @@ namespace PersonalAI
 
         private async Task DoPredict()
         {
+            var prompt = SearchBox.Text.Trim();
+            if (string.IsNullOrEmpty(prompt)) return;
+
             try
             {
-                ResponseTB.Text = await _gradioClient.Predict((string)LLMOptions.SelectedValue, SearchBox.Text);
-            }
-            catch (Exception ex) 
-            {
-                ResponseTB.Text = "Something went wrong. Try again later...";
-            }
-        }
+                _conversation.AddMessage("user", prompt);
+                SearchBox.Text = string.Empty;
+                ChatScrollViewer.ScrollToEnd();
 
-        private void ShowResponse()
-        {
-            ResponseTB.Visibility = Visibility.Visible;
-            CopyToClipboardBtn.Visibility = Visibility.Visible;
-            ClearResponseBtn.Visibility = Visibility.Visible;
-            CopyToClipboardBtn.Focus();
-        }
-
-        private void CollapseResponse(bool clearContent=true)
-        {
-            ResponseTB.Visibility = Visibility.Collapsed;
-            CopyToClipboardBtn.Visibility = Visibility.Collapsed;
-            ClearResponseBtn.Visibility = Visibility.Collapsed;
-            if (clearContent) 
-            {
-                ResponseTB.Text = string.Empty;
+                var reply = await _llmClient.CompleteAsync((string)LLMOptions.SelectedValue, _conversation.GetEffectiveHistory());
+                _conversation.AddMessage("assistant", reply);
             }
+            catch (Exception)
+            {
+                _conversation.AddMessage("assistant", "Something went wrong. Try again later...");
+            }
+
+            ChatScrollViewer.ScrollToEnd();
         }
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
@@ -191,15 +182,16 @@ namespace PersonalAI
             WindowState = WindowState.Minimized;
         }
 
-        private void ClearResponseBtn_Click(object sender, RoutedEventArgs e)
+        private void NewChatBtn_Click(object sender, RoutedEventArgs e)
         {
-            CollapseResponse(true);
-
+            _conversation.Clear();
         }
 
         private void CopyToClipboardBtn_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Clipboard.SetText(ResponseTB.Text);
+            var lastAssistant = _conversation.Messages.LastOrDefault(m => !m.IsUser);
+            if (lastAssistant != null)
+                System.Windows.Clipboard.SetText(lastAssistant.Content);
         }
 
         private void SettingBtn_Click(object sender, RoutedEventArgs e)

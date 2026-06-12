@@ -80,24 +80,26 @@ namespace PersonalAI
         private void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
-            //var appSettings = Configuration.Get<AppSettings>();
             services.AddScoped<IGradioClient, GradioClient>();
-            //services.AddTransient(typeof(MainWindow)), factory => new MainWindow();
+            services.AddScoped<OpenAIClient>();
+            services.AddScoped<ClaudeClient>();
+            services.AddScoped<ILLMClient, LLMDispatcher>();
+            services.AddTransient<PersonalAI.ViewModels.ConversationViewModel>();
             services.AddTransient(typeof(MainWindow));
 
             var tempService = services.BuildServiceProvider();
             var tempAppSettings = tempService.GetRequiredService<IOptions<AppSettings>>();
-            if (tempAppSettings.Value == null || tempAppSettings.Value.GradleSettings == null || tempAppSettings.Value.GradleSettings.Length == 0)
+            if (tempAppSettings.Value == null || tempAppSettings.Value.Providers == null || tempAppSettings.Value.Providers.Length == 0)
             {
                 throw new Exception("Invalid appSettings");
             }
 
-            var httpClientFactory = tempService.GetService<IHttpClientFactory>();
-            foreach (var item in tempAppSettings.Value.GradleSettings)
+            foreach (var item in tempAppSettings.Value.Providers)
             {
                 services.AddHttpClient(item.LLMType, httpClient =>
                 {
-                    httpClient.BaseAddress = new Uri(item.Url);
+                    if (!string.IsNullOrEmpty(item.Url))
+                        httpClient.BaseAddress = new Uri(item.Url.TrimEnd('/') + "/");
                 });
             }
         }

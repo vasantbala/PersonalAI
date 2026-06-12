@@ -2,6 +2,6 @@
 {
     public class AppSettings
     {
-        public GradleSettingsItem[] GradleSettings { get; set; }
+        public LLMProviderConfig[] Providers { get; set; }
     }
 }

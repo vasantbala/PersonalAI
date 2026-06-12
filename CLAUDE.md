@@ -17,28 +17,28 @@ PersonalAI is a Windows desktop application (WPF) that provides a lightweight UI
 ### Building the Project
 ```bash
 # Build using .NET CLI
-dotnet build "e:\github\PersonalAI\PersonalAI.Sandbox\PersonalAI.Sandbox.sln"
+dotnet build PersonalAI.Sandbox/PersonalAI.Sandbox.sln
 
 # Build in Release mode
-dotnet build "e:\github\PersonalAI\PersonalAI.Sandbox\PersonalAI.Sandbox.sln" -c Release
+dotnet build PersonalAI.Sandbox/PersonalAI.Sandbox.sln -c Release
 
 # Build just the main application
-dotnet build "e:\github\PersonalAI\PersonalAI\PersonalAI.csproj"
+dotnet build PersonalAI/PersonalAI.csproj
 ```
 
 ### Running the Application
 ```bash
 # Run the main WPF application
-dotnet run --project "e:\github\PersonalAI\PersonalAI\PersonalAI.csproj"
+dotnet run --project PersonalAI/PersonalAI.csproj
 
 # Run in Release mode
-dotnet run --project "e:\github\PersonalAI\PersonalAI\PersonalAI.csproj" -c Release
+dotnet run --project PersonalAI/PersonalAI.csproj -c Release
 ```
 
 ### Publishing
 ```bash
 # Publish as single executable file (configured in .csproj)
-dotnet publish "e:\github\PersonalAI\PersonalAI\PersonalAI.csproj" -c Release -o ./publish
+dotnet publish PersonalAI/PersonalAI.csproj -c Release -o ./publish
 ```
 
 ## Project Structure and Architecture
@@ -133,11 +133,11 @@ Multiple LLM services can be configured and selected from the dropdown. The URL 
 
 ## Important Files
 
-- `e:\github\PersonalAI\PersonalAI\App.xaml.cs` - Startup and DI configuration
-- `e:\github\PersonalAI\PersonalAI\MainWindow.xaml.cs` - Main UI logic and event handlers
-- `e:\github\PersonalAI\PersonalAI.Core\GradioClient.cs` - LLM HTTP communication
-- `e:\github\PersonalAI\PersonalAI\appsettings.json` - LLM service configuration
-- `e:\github\PersonalAI\PersonalAI.Sandbox\PersonalAI.Sandbox.sln` - Solution file with all projects
+- `PersonalAI/App.xaml.cs` - Startup and DI configuration
+- `PersonalAI/MainWindow.xaml.cs` - Main UI logic and event handlers
+- `PersonalAI.Core/GradioClient.cs` - LLM HTTP communication
+- `PersonalAI/appsettings.json` - LLM service configuration
+- `PersonalAI.Sandbox/PersonalAI.Sandbox.sln` - Solution file with all projects
 
 ## Development Notes
 

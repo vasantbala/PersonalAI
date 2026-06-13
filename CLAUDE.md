@@ -17,10 +17,10 @@ PersonalAI is a Windows desktop application (WPF) that provides a lightweight UI
 ### Building the Project
 ```bash
 # Build using .NET CLI
-dotnet build PersonalAI.Sandbox/PersonalAI.Sandbox.sln
+dotnet build PersonalAI.sln
 
 # Build in Release mode
-dotnet build PersonalAI.Sandbox/PersonalAI.Sandbox.sln -c Release
+dotnet build PersonalAI.sln -c Release
 
 # Build just the main application
 dotnet build PersonalAI/PersonalAI.csproj
@@ -137,12 +137,12 @@ Multiple LLM services can be configured and selected from the dropdown. The URL 
 - `PersonalAI/MainWindow.xaml.cs` - Main UI logic and event handlers
 - `PersonalAI.Core/GradioClient.cs` - LLM HTTP communication
 - `PersonalAI/appsettings.json` - LLM service configuration
-- `PersonalAI.Sandbox/PersonalAI.Sandbox.sln` - Solution file with all projects
+- `PersonalAI.sln` - Solution file (root)
 
 ## Development Notes
 
-- The solution file is located in PersonalAI.Sandbox/ but contains references to all projects in the root
-- PersonalAI.Sandbox and PersonalAI.Sandbox.WPF are alternative implementations; main app is PersonalAI
+- `PersonalAI.sln` is at the repo root; the old `PersonalAI.Sandbox/PersonalAI.Sandbox.sln` is legacy and includes the sandbox projects
+- `PersonalAI.Sandbox.WPF` is an alternative implementation; main app is `PersonalAI`
 - MahApps.Metro.IconPacks provides Modern icon style used throughout the UI
 - XAML uses data binding extensively; changes to ViewModels require PropertyChanged events
 - The application must run from a directory containing appsettings.json (set via Directory.GetCurrentDirectory() in App.cs)
